@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CITIES</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="jquery.cookie.js"></script>
+
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <label class="countryLabel" for="country">Select country</label>
+    <input type="text" name="Country" id="country" size="5" />
+    <input type="number" name="LimitValue" id="chooseLimit" value="10" min="1" max="10000" />
+    <input type="submit" class="submit" onclick="clickon()" />
+
+    <div id="accordionList"></div>
+</body>
+<script>
+    var test = document.getElementById("accordionList").innerHTML;
+
+    $('input[type="text"][name="Country"]').change(function() {
+        var staticInfo = $("#country").val();
+        $.cookie('changed', staticInfo, {
+            expires: 2
+        }); // expires in 2 day
+    });
+
+    var changed = $.cookie('changed');
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+        var oldCookie = $.cookie('changed');
+        if (!oldCookie) {} else
+            $("#country").val(oldCookie);
+    });
+
+    var acc = $(".accordion");
+
+    for (var i = 0; i < acc.length; i++) {
+        var list = acc[i];
+        list.addEventListener("click", function() {
+            var fullPanel = this.nextElementSibling;
+            if(fullPanel.style.display === "block") {
+                $(fullPanel).css("display", "none");
+            } else {
+                $(fullPanel).css("display", "block");
+            }
+        });
+    };
+</script></html>

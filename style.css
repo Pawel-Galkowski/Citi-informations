@@ -1,0 +1,112 @@
+body {
+    font-size: 1.1rem;
+    padding: 1rem 2rem;
+    margin: 0;
+    overflow: hidden-x;
+    background: #F7F7FF;
+    color: #131112;
+}
+
+.ui-menu .ui-menu-item a {
+    height: 10px;
+    font-size: 17px;
+}
+
+.ui-tooltip {
+    background: #60656F;
+    color: #131112;
+    border: 2px solid #454545;
+    border-radius: 0px;
+}
+
+.ui-autocomplete {
+    background: #C49991;
+    border-radius: 0px;
+}
+
+.ui-menu-item-wrapper{
+    padding: 3px;
+}
+
+.ui-menu-item-wrapper:hover {
+    background: #279AF1;
+}
+
+#ui-id-1 {
+    width: 100px;
+    list-style-type: none;
+    padding: 0.5rem 1px;
+    font-size: 1.2rem;
+}
+
+#ui-id-1 li {
+    padding: 0.2rem;
+}
+
+#country {
+    width: 150px;
+    padding: 2px;
+    color: black;
+}
+
+#chooseLimit {
+    padding: 2px;
+    color: black;
+    width: 50px;
+}
+
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+}
+
+.active,
+.accordion:hover {
+    background-color: #ccc;
+}
+
+.panel {
+    display: none;
+    padding: 5px 15px;
+    background-color: white;
+    max-height: 50px;
+    height: auto;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+#accordionList {
+    display: none;
+    margin: 2rem 0 0 0;
+    border: 2px solid #131112;
+}
+
+.submit {
+    color: #fff;
+    text-transform: uppercase;
+    text-decoration: none;
+    background: #279AF1;
+    padding: 10px;
+    margin: 0 0 0 0.5rem;
+    border-radius: 5px;
+    display: inline-block;
+    border: none;
+    transition: all 0.4s ease 0s;
+}
+
+.submit:hover {
+    background: #131112;
+    letter-spacing: 1px;
+    -webkit-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
+    -moz-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
+    box-shadow: 5px 40px -10px rgba(0, 0, 0, 0.57);
+    transition: all 0.4s ease 0s;
+}
