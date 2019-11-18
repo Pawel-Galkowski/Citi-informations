@@ -15,12 +15,15 @@
 </head>
 
 <body>
-    <label class="countryLabel" for="country">Select country</label>
-    <input type="text" name="Country" id="country" size="5" />
-    <input type="number" name="LimitValue" id="chooseLimit" value="10" min="1" max="10000" />
-    <input type="submit" class="submit" onclick="clickon()" />
-
-    <div id="accordionList"></div>
+    <article class="container">
+        <header class="selection-side">
+            <label class="countryLabel" for="country">Select country</label>
+            <input type="text" name="Country" id="country" size="5" />
+            <input type="number" name="LimitValue" id="chooseLimit" value="10" min="1" max="10000" />
+            <input type="submit" class="submit" onclick="clickon()" />
+        </header>
+        <section id="accordionList"></section>
+    </article>
 </body>
 <script>
     var test = document.getElementById("accordionList").innerHTML;

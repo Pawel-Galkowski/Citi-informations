@@ -14,12 +14,13 @@ body {
     margin: 0 auto;
     display: flex;
     justify-content: center;
+    flex-direction: column;
 }
 
 .selection-side{
     width: auto;
-    max-width: calc(100%-50%);
-    min-width: 400px;
+    min-width: 500px;
+    max-width: 70%;
 }
 
 .ui-menu .ui-menu-item a {
