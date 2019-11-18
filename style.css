@@ -5,6 +5,21 @@ body {
     overflow: hidden-x;
     background: #F7F7FF;
     color: #131112;
+    display: flex
+}
+
+.container{
+    width: auto;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+.selection-side{
+    width: auto;
+    max-width: calc(100%-50%);
+    min-width: 400px;
 }
 
 .ui-menu .ui-menu-item a {
@@ -87,6 +102,7 @@ body {
     display: none;
     margin: 2rem 0 0 0;
     border: 2px solid #131112;
+    max-width: 1000px;
 }
 
 .submit {
