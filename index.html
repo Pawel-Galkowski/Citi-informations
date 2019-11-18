@@ -1,59 +1,37 @@
 <!DOCTYPE html>
-<html lang="pl">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CITIES</title>
-
-    <link rel="stylesheet" href="style.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="jquery.cookie.js"></script>
-
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Country Information</title>
+    <link rel="stylesheet" href="style.css" />
     <script src="script.js"></script>
-</head>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Country Information</h1>
 
-<body>
-    <article class="container">
-        <header class="selection-side">
-            <label class="countryLabel" for="country">Select country</label>
-            <input type="text" name="Country" id="country" size="5" />
-            <input type="number" name="LimitValue" id="chooseLimit" value="10" min="1" max="10000" />
-            <input type="submit" class="submit" onclick="clickon()" />
-        </header>
-        <section id="accordionList"></section>
-    </article>
-</body>
-<script>
-    var test = document.getElementById("accordionList").innerHTML;
+      <div class="select-box">
+        <div class="options-container"></div>
 
-    $('input[type="text"][name="Country"]').change(function() {
-        var staticInfo = $("#country").val();
-        $.cookie('changed', staticInfo, {
-            expires: 2
-        }); // expires in 2 day
-    });
+        <div class="selected">
+          Select Country
+        </div>
 
-    var changed = $.cookie('changed');
-
-    window.addEventListener('DOMContentLoaded', (event) => {
-        var oldCookie = $.cookie('changed');
-        if (!oldCookie) {} else
-            $("#country").val(oldCookie);
-    });
-
-    var acc = $(".accordion");
-
-    for (var i = 0; i < acc.length; i++) {
-        var list = acc[i];
-        list.addEventListener("click", function() {
-            var fullPanel = this.nextElementSibling;
-            if(fullPanel.style.display === "block") {
-                $(fullPanel).css("display", "none");
-            } else {
-                $(fullPanel).css("display", "block");
-            }
-        });
-    };
-</script></html>
+        <div class="search-box">
+          <input type="text" placeholder="Start Typing..." />
+        </div>
+      </div>
+      <div class="informations">
+        <div class="title"></div>
+        <div class="description"></div>
+        <div class="readMore"></div>
+        <div class="postApi"></div>
+      </div>
+    </div>
+    <script>
+      startProcess();
+    </script>
+  </body>
+</html>

@@ -1,134 +1,111 @@
-function clickon() {
-    var test = document.getElementById("accordionList").innerHTML = "";
-    var countries = ["PL", "DE", "ES", "FR"];
-    var baseApi = "https://api.openaq.org/v1/";
-    var measurements = "measurements?";
-    var limiNum = document.getElementById("chooseLimit").value;
-    var data = document.getElementById("country").value;
-    data = data.toUpperCase();
-    switch (data) {
-        case "POLAND":
-            data = "PL";
-            break;
-        case "FRANCE":
-            data = "FR";
-            break;
-        case "SPAIN":
-            data = "ES";
-            break;
-        case "GERMANY":
-            data = "DE";
-            break;
-        default:
-            data = data;
-    }
-    if (limiNum > 10000) {
-        alert("wartosc przekracza 10000");
-    } else if (limiNum < 1) {
-        alert("wartosc jest mniejsz niż 1");
-    } else {
-        var apiLimit = "limit=" + limiNum * 5;
-        var countryCode = "&country=" + data;
-        var parameterInfo = "&parameter[]=pm10";
-        var orderBy = "&order_by[]=value&order_by[]=parameter";
-        var sorting = "&sort[]=desc";
-        var cleaned = [];
-        var fullUrl = baseApi + measurements + apiLimit + parameterInfo + orderBy + countryCode + sorting;
-        try {
-            if (countries.includes(data)) {
-                fetch(fullUrl)
-                    .then(resp => resp.json())
-                    .then(resp => {
-                        var maxData = resp.results.length;
-                        for (var a = 0; a < maxData; a++) {
-                            if (a === 0) {
-                                cleaned.push(resp.results[a].city);
-                            } else if (cleaned.includes(resp.results[a].city)) {
-                                var unique = false;
-                            } else {
-                                cleaned.push(resp.results[a].city);
-                            }
-                        };
-                        for (var a = 0; a < limiNum; a++) {
-                            if (cleaned[a] !== undefined) {
-                                document.getElementById("accordionList").innerHTML += "<button class='accordion'>" + cleaned[a] + "</button>";
-                                appendText(a);
-                                description(cleaned[a], a);
-                            } else {
-                                document.getElementById("accordionList").innerHTML += "<p style='color:red; font-weight: bold;'> Can't find more unique elements. Returned " + a + " elements </p>";
-                                break;
-                            }
-                        }
-                    });
-                $("#accordionList").css("display", "block");
-            } else {
-                alert("Państwo nie spełnie wymagań");
-            }
-        } catch (err) {
-            console.log(err);
-        };
-    };
+const startProcess = async () => {
+  const url = "https://api.openaq.org/v1/countries";
+  let countriesArray = [];
+  let countries = [];
+  try {
+    await fetch(url)
+    .then((resp) => resp.json())
+    .then((resp) => {
+      resp.results.map((res) => countriesArray.push(res.name));
+      countriesArray = countriesArray.filter(function (element) {
+        return element !== undefined;
+      });
+      countries = Object.values(countriesArray);
+    });
+  } catch (e){
+    console.error(e)
+  }
+
+  createSelectors(countries);
 };
 
-function appendText(num) {
-    var txt = $("<div id='listOfAcc'"+num+"></div>");
-    $("#num" + num).append(txt);
+const createSelectors = (countries) => {
+  const parent = document.querySelector(".options-container");
+  countries.map((el) => {
+    parent.insertAdjacentHTML(
+      "beforeEnd",
+      `
+      <div class="option">
+        <input type="radio" class="radio" id=${el.toLowerCase()} name="category" />
+        <label for=${el.toLowerCase()}>${el}</label>
+      </div>
+    `
+    );
+  });
+
+  operations()
+};
+
+const operations = () => {
+  const selected = document.querySelector(".selected");
+  const optionsContainer = document.querySelector(".options-container");
+  const searchBox = document.querySelector(".search-box input");
+  const optionsList = document.querySelectorAll(".option");
+
+  selected.addEventListener("click", () => {
+    optionsContainer.classList.toggle("active");
+    searchBox.value = "";
+    filterList("");
+
+    if (optionsContainer.classList.contains("active")) {
+      searchBox.focus();
+    }
+  });
+
+  optionsList.forEach((o) => {
+    o.addEventListener("click", () => {
+      selected.innerHTML = o.querySelector("label").innerHTML;
+      optionsContainer.classList.remove("active");
+      description(selected.innerHTML)
+    });
+  });
+
+  searchBox.addEventListener("keyup", function (e) {
+    filterList(e.target.value);
+  });
+
+  const filterList = (searchTerm) => {
+    searchTerm = searchTerm.toLowerCase();
+    optionsList.forEach((option) => {
+      let label =
+        option.firstElementChild.nextElementSibling.innerText.toLowerCase();
+      if (label.indexOf(searchTerm) != -1) {
+        option.style.display = "block";
+      } else {
+        option.style.display = "none";
+      }
+    });
+  };
+};
+
+const clearInformations = (a) => {
+  a.innerHTML = ''
 }
 
-function description(city, num) {
-    var descriptionApi = "https://en.wikipedia.org/w/api.php?action=query&prop=description&format=json&origin=*&titles=" + city;
-    try {
-        fetch(descriptionApi)
-            .then(
-                resp => resp.json())
-            .then(resp => {
-                //document.getElementById("accordionList").innerHTML += "<div class='panel'>" + resp.pages[0].description + "</div>";
-                document.getElementById("accordionList").nextSibling.innerHTML += "<div class='panel'>" + "description" + "</div>";
-            });
-    } catch (err) {
-        console.log(err);
-    };
+async function description(city) {
+  const second = `https://en.wikipedia.org/w/api.php?action=query&prop=description&origin=*&format=json&titles=${city}`;
+  try {
+    data = {
+      city
+    }
+    await fetch(second)
+      .then((resp) => resp.json())
+      .then((resp) => {
+        const path = Object.values(resp.query.pages)[0]
+        const title = document.querySelector(".informations").querySelector(".title")
+        const description = document.querySelector(".informations").querySelector(".description")
+        const postApi = document.querySelector(".informations").querySelector(".postApi")
+        const readMore = document.querySelector(".informations").querySelector(".readMore")
+        title.innerHTML = ''
+        description.innerHTML = ''
+        postApi.innerHTML = ''
+        readMore.innerHTML = ''
+        title.insertAdjacentHTML("beforeEnd", `<h2>${path.title}</h2>`)
+        description.insertAdjacentHTML("beforeEnd", path.description)
+        postApi.insertAdjacentHTML("beforeEnd", `<h5>Informations from wikipedia.org</h5>`)
+        readMore.insertAdjacentHTML("beforeEnd", `<p>Read more on <a href="https://en.wikipedia.org/wiki/${city}" target="_blank">wikipedia</a></p>`)
+      });
+  } catch (err) {
+    console.log(err);
+  }
 }
-
-$(function () {
-    var availableTags = [
-            "Poland",
-            "Germany",
-            "Spain",
-            "France"
-        ];
-
-    function split(val) {
-        return val.split(/,\s*/);
-    }
-
-    function extractLast(term) {
-        return split(term).pop();
-    }
-
-    $("#country")
-        .on("keydown", function (event) {
-            if (event.keyCode === $.ui.keyCode.TAB && $(this).autocomplete("instance").menu.active) {
-                event.preventDefault();
-            }
-        })
-        .autocomplete({
-            minLength: 1,
-            source: function (req, res) {
-                res($.ui.autocomplete.filter(
-                    availableTags, extractLast(req.term)));
-            },
-            focus: function () {
-                return false;
-            },
-            select: function (event, ui) {
-                var terms = split(this.value);
-                terms.pop();
-                terms.push(ui.item.value);
-                this.value = terms;
-                return false;
-            }
-        });
-
-    $(".ui-helper-hidden-accessible").css("visibility", "hidden");
-});
